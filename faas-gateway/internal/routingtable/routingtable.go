@@ -32,8 +32,9 @@ func poll(rt *RoutingTable) {
     for _, container := range containers {
       labels := container.Labels
       name, port, state := labels[lname], labels[lport], container.State
-      network := container.NetworkSettings
-      ipAddress := network.Networks["bridge"].IPAddress
+      // docker API adds a forward slash to the name
+      containerName := container.Names[0][1:]
+      fmt.Println(containerName)
       srv, exists := services["/" + name]
       if !exists {
         srv = service.Service {
@@ -41,20 +42,20 @@ func poll(rt *RoutingTable) {
           Total: 0,
           Available: 0,
           Port: port,
-          IPAddresses: make([]string, 0),
+          Hosts: make([]string, 0),
         }
       }
       srv.Total += 1
       if state == "running" {
         srv.Available += 1
-        srv.IPAddresses = append(srv.IPAddresses, ipAddress)
+        srv.Hosts = append(srv.Hosts, containerName)
       }
       services["/" + name] = srv
       message := fmt.Sprintf("%s", srv) 
       rt.Messages <- message
     }
     rt.Routes = services
-    time.Sleep(time.Second * 4)
+    time.Sleep(time.Second * 5)
   }
 }
 

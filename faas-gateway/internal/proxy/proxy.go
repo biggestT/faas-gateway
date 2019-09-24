@@ -1,7 +1,6 @@
 package proxy
 
 import (
-  "fmt"
   "net/http"
   "net/http/httputil"
   "github.com/biggestT/faas-gateway/internal/routingtable"
@@ -18,13 +17,12 @@ func (f *proxyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusNotFound)
     return
   }
-  fmt.Println(r.URL.Path)
   srvHost := service.GetHost(&srv)
   r.URL.Scheme = "http"
-	r.URL.Host = srvHost
-	r.URL.Path = ""
-	proxy := httputil.NewSingleHostReverseProxy(r.URL)
-	proxy.ServeHTTP(w, r)
+  r.URL.Host = srvHost
+  r.URL.Path = ""
+  proxy := httputil.NewSingleHostReverseProxy(r.URL)
+  proxy.ServeHTTP(w, r)
 }
 
 func ProxyServer(

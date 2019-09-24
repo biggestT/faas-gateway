@@ -4,7 +4,7 @@ import (
   "github.com/biggestT/faas-gateway/internal/routingtable"
   "github.com/biggestT/faas-gateway/internal/proxy"
   "net/http"
-	"fmt"
+  "fmt"
 )
 
 func log(rt *routingtable.RoutingTable) {
@@ -22,6 +22,6 @@ func main(){
   http.Handle("/", proxy.ProxyServer(rt))
   fmt.Println("Proxy server started")
   if err := http.ListenAndServe(":8080", nil); err != nil {
-		panic(err)
-	}
+    panic(err)
+  }
 }

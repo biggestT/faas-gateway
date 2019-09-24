@@ -9,10 +9,10 @@ type Service struct {
   Total int
   Available int
   Port string
-  IPAddresses []string
+  Hosts []string
 }
 
 func GetHost(service *Service) string {
-  parts := []string{service.IPAddresses[0], service.Port}
+  parts := []string{service.Hosts[0], service.Port}
   return strings.Join(parts, ":")
 }
