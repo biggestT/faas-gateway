@@ -1,10 +1,10 @@
+// passes incoming requests to appropiate service if possible
 package proxy
 
 import (
   "net/http"
   "net/http/httputil"
   "github.com/biggestT/faas-gateway/internal/routingtable"
-  "github.com/biggestT/faas-gateway/internal/service"
 )
 
 type proxyHandler struct {
@@ -17,7 +17,7 @@ func (f *proxyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusNotFound)
     return
   }
-  srvHost := service.GetHost(&srv)
+  srvHost := srv.NextHost()
   r.URL.Scheme = "http"
   r.URL.Host = srvHost
   r.URL.Path = ""

@@ -15,12 +15,12 @@ func log(rt *routingtable.RoutingTable) {
 }
 
 func main(){
-  fmt.Println("Gateway initiating")
+  fmt.Println("gateway initiating")
   rt, _ := routingtable.NewRoutingTable()
-  fmt.Println("Service discovery initiated")
+  fmt.Println("service discovery initiated")
   go log(rt)
   http.Handle("/", proxy.ProxyServer(rt))
-  fmt.Println("Proxy server started")
+  fmt.Println("proxy server started")
   if err := http.ListenAndServe(":8080", nil); err != nil {
     panic(err)
   }
