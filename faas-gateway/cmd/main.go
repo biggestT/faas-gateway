@@ -6,12 +6,11 @@ import (
 )
 
 func main(){
-	fmt.Println("Gateway Started")
+  fmt.Println("Gateway Started")
   rt, _ := routingtable.NewRoutingTable()
   for {
     msg := <- rt.Messages
     fmt.Println(msg)
   }
   select {}
-  // time.Sleep(time.Second*20)
 }
