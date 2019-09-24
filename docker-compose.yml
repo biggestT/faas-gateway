@@ -1,0 +1,16 @@
+version: "3.0"
+services:
+  faas-gateway:
+    build:
+      context: ./faas-gateway
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  reducer:
+    image: eu.gcr.io/travtech/github_biggestt_travtech-system-reducer:4dd381d
+    labels:
+      - "faas.name=reducer"
+      - "faas.port=5000"
+    environment:
+      - CORS_ORIGIN="*"
