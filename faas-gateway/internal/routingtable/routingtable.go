@@ -4,7 +4,6 @@ import (
   "context"
   "time"
   "fmt"
-  "strconv"
   "github.com/biggestT/faas-gateway/internal/service"
   "github.com/docker/docker/api/types"
   "github.com/docker/docker/api/types/filters"
@@ -12,9 +11,9 @@ import (
 )
 
 type RoutingTable struct {
-  Services map[string]service.Service
-  Client *client.Client
+  Routes map[string]service.Service
   Messages chan string
+  dockerClient *client.Client
 }
 
 func poll(rt *RoutingTable) {
@@ -23,7 +22,7 @@ func poll(rt *RoutingTable) {
   filters.Contains(lname)
   filters.Contains(lport)
   for {
-    containers, err := rt.Client.ContainerList(context.Background(), types.ContainerListOptions{
+    containers, err := rt.dockerClient.ContainerList(context.Background(), types.ContainerListOptions{
       Filters: filters,
     })
     if err != nil {
@@ -32,11 +31,10 @@ func poll(rt *RoutingTable) {
     services := make(map[string]service.Service)
     for _, container := range containers {
       labels := container.Labels
-      name, state := labels[lname], container.State
-      port, _ := strconv.Atoi(labels[lport])
+      name, port, state := labels[lname], labels[lport], container.State
       network := container.NetworkSettings
       ipAddress := network.Networks["bridge"].IPAddress
-      srv, exists := services[name]
+      srv, exists := services["/" + name]
       if !exists {
         srv = service.Service {
           Name: name,
@@ -51,20 +49,20 @@ func poll(rt *RoutingTable) {
         srv.Available += 1
         srv.IPAddresses = append(srv.IPAddresses, ipAddress)
       }
-      services[name] = srv
+      services["/" + name] = srv
       message := fmt.Sprintf("%s", srv) 
       rt.Messages <- message
     }
-    rt.Services = services
-    time.Sleep(time.Second * 2)
+    rt.Routes = services
+    time.Sleep(time.Second * 4)
   }
 }
 
 func NewRoutingTable() (*RoutingTable, error) {
   rt := new(RoutingTable)
   cli, err := client.NewClientWithOpts(client.FromEnv)
-  rt.Client = cli
-  rt.Services = make(map[string]service.Service)
+  rt.dockerClient = cli
+  rt.Routes = make(map[string]service.Service)
   rt.Messages = make(chan string)
   go poll(rt)
   return rt, err
