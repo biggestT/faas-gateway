@@ -1,32 +1,27 @@
-// passes incoming requests to appropiate service if possible
-package proxy
+// returns appropriate rhymes for requested name
+package api
 
 import (
   "net/http"
-  "net/http/httputil"
   "github.com/biggestT/rhymer/internal/dict"
 )
 
-type apiHandler struct {
-  rhymer *dict.RoutingTable
+type requestHandler struct {
+  dict *dict.Dict
 }
 
-func (f *proxyHandler) ApiHandler(w http.ResponseWriter, r *http.Request) {
-  srv, exists := f.routing.Routes[r.URL.Path]
-  if !exists {
-    w.WriteHeader(http.StatusNotFound)
+func (h *requestHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+  names, ok := r.URL.Query()["name"]
+  if !ok || len(names) < 1 {
+    w.WriteHeader(http.StatusBadRequest)
     return
   }
-  srvHost := srv.NextHost()
-  r.URL.Scheme = "http"
-  r.URL.Host = srvHost
-  r.URL.Path = ""
-  proxy := httputil.NewSingleHostReverseProxy(r.URL)
-  proxy.ServeHTTP(w, r)
+  rhyme := h.dict.NextRhyme(names[0])
+  w.Write([]byte(rhyme))
 }
 
-func ApiHandler(
-  routing *routingtable.RoutingTable,
+func Api(
+  dict *dict.Dict,
 ) http.Handler {
-  return &proxyHandler{routing}
+  return &requestHandler{dict}
 }

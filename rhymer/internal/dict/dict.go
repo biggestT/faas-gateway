@@ -32,12 +32,12 @@ type Dict struct {
   rhymeSoundExp *regexp.Regexp
 }
 
-func (d *Dict) GetSyllable(word string) string {
+func (d *Dict) getSyllable(word string) string {
   return d.rhymeSoundExp.FindString(word) 
 }
 
 func (d *Dict) NextRhyme(word string) string {
-  syll := d.GetSyllable(word)
+  syll := d.getSyllable(word)
   sound := d.rhymes[syll]
   for sound == nil {
     syll = syll[1:]
@@ -69,7 +69,7 @@ func New(file string) *Dict {
     txt := scanner.Text()
     word, class := parseLine(txt)
     if class == "nn" {
-      syllable := dict.GetSyllable(word) 
+      syllable := dict.getSyllable(word) 
       sound, exists := dict.rhymes[syllable]
       if !exists {
         dict.rhymes[syllable] = NewSound(word)
