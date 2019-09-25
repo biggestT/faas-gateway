@@ -37,12 +37,11 @@ func UpdateMessages(a serviceMap, b serviceMap) *list.List {
 
 func (r *RoutingTable) poll(freq time.Duration) {
   lname, lport := "faas.name", "faas.port"
-  filters := filters.NewArgs()
-  filters.Contains(lname)
-  filters.Contains(lport)
+  filter := filters.NewArgs()
+  filter.Add("label", "faas.app=true")
   for {
     containers, err := r.dockerClient.ContainerList(context.Background(), types.ContainerListOptions{
-      Filters: filters,
+      Filters: filter,
     })
     if err != nil {
       panic(err)

@@ -15,6 +15,7 @@ services:
     deploy:
       replicas: 2
     labels:
+      - "faas.app=true"
       - "faas.name=rhymer"
       - "faas.port=8080"
   # reducer:
