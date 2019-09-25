@@ -9,21 +9,23 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - DOCKER_API_VERSION=1.40
+      - CORS_ORIGIN=*
   rhymer:
     build:
       context: ./rhymer
     deploy:
-      replicas: 2
+      replicas: 1
     labels:
       - "faas.app=true"
       - "faas.name=rhymer"
       - "faas.port=8080"
-  # reducer:
-  #   image: eu.gcr.io/travtech/github_biggestt_travtech-system-reducer:4dd381d
-  #   deploy:
-  #     replicas: 2
-  #   labels:
-  #     - "faas.name=reducer"
-  #     - "faas.port=5000"
-  #   environment:
-  #     - CORS_ORIGIN="*"
+  reducer:
+    image: eu.gcr.io/travtech/github_biggestt_travtech-system-reducer:4dd381d
+    deploy:
+      replicas: 1
+    labels:
+      - "faas.app=true"
+      - "faas.name=reducer"
+      - "faas.port=5000"
+    environment:
+      - CORS_ORIGIN="*"

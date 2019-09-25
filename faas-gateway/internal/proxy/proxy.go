@@ -9,6 +9,14 @@ import (
 
 type proxyHandler struct {
   routing *routingtable.RoutingTable
+  corsOrigin string
+}
+
+func (f *proxyHandler) enableCors(w *http.ResponseWriter) {
+  header := (*w).Header()
+	header.Set("Access-Control-Allow-Origin", f.corsOrigin)
+	header.Set("Access-Control-Allow-Headers", "*")
+  header.Set("Access-Control-Allow-Methods", "GET, POST, HEAD")
 }
 
 func (f *proxyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -21,12 +29,16 @@ func (f *proxyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
   r.URL.Scheme = "http"
   r.URL.Host = srvHost
   r.URL.Path = ""
+  f.enableCors(&w)
   proxy := httputil.NewSingleHostReverseProxy(r.URL)
   proxy.ServeHTTP(w, r)
 }
 
 func ProxyServer(
   routing *routingtable.RoutingTable,
+  corsOrigin string,
 ) http.Handler {
-  return &proxyHandler{routing}
+  return &proxyHandler{routing, corsOrigin}
 }
+
+
