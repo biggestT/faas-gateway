@@ -1,0 +1,20 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - build
+  - -t
+  - eu.gcr.io/$PROJECT_ID/faas-gateway:$SHORT_SHA
+  - ./faas-gateway
+
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - build
+  - -t
+  - eu.gcr.io/$PROJECT_ID/rhymer:$SHORT_SHA
+  - ./rhymer
+
+images:
+- eu.gcr.io/$PROJECT_ID/faas-gateway:$SHORT_SHA
+- eu.gcr.io/$PROJECT_ID/faas-gateway:latest
+- eu.gcr.io/$PROJECT_ID/rhymer:$SHORT_SHA
+- eu.gcr.io/$PROJECT_ID/rhymer:latest

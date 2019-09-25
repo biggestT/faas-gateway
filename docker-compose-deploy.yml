@@ -1,0 +1,28 @@
+version: "3.0"
+services:
+  faas-gateway:
+    image: eu.gcr.io/travtech/faas-gateway:latest
+    ports:
+      - "80:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOCKER_API_VERSION=1.40
+  rhymer:
+    image: eu.gcr.io/travtech/rhymer:latest
+    deploy:
+      replicas: 1
+    labels:
+      - "faas.app=true"
+      - "faas.name=rhymer"
+      - "faas.port=8080"
+  reducer:
+    image: eu.gcr.io/travtech/github_biggestt_travtech-system-reducer:4dd381d
+    deploy:
+      replicas: 1
+    labels:
+      - "faas.app=true"
+      - "faas.name=reducer"
+      - "faas.port=5000"
+    environment:
+      - CORS_ORIGIN="*"
