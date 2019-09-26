@@ -13,19 +13,14 @@ services:
   rhymer:
     build:
       context: ./rhymer
-    deploy:
-      replicas: 1
     labels:
       - "faas.app=true"
       - "faas.name=rhymer"
       - "faas.port=8080"
-  reducer:
-    image: test 
-    deploy:
-      replicas: 1
+  track:
+    build:
+      context: ./track
     labels:
       - "faas.app=true"
-      - "faas.name=reducer"
-      - "faas.port=5000"
-    environment:
-      - CORS_ORIGIN="*"
+      - "faas.name=track"
+      - "faas.port=8080"

@@ -2,7 +2,7 @@
 
 registry=eu.gcr.io
 project=travtech
-images=("faas-gateway" "rhymer" "reducer")
+images=("faas-gateway" "rhymer" "reducer" "track")
 
 for image in "${images[@]}"
 do
