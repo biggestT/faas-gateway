@@ -20,7 +20,7 @@ services:
       - "faas.name=rhymer"
       - "faas.port=8080"
   reducer:
-    image: eu.gcr.io/travtech/github_biggestt_travtech-system-reducer:4dd381d
+    image: test 
     deploy:
       replicas: 1
     labels:
