@@ -11,7 +11,6 @@ import (
 func main(){
   fmt.Println("tracker initiating")
   trackMap := track.New("data/tracks.csv")
-  fmt.Println(trackMap)
   apiHandler := api.Api(trackMap)
 	logger := log.New(os.Stdout, "http: ", log.LstdFlags)
   http.Handle("/", logging(logger)(apiHandler))
