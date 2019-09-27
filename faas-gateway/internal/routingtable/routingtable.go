@@ -70,12 +70,12 @@ func (r *RoutingTable) poll(freq time.Duration) {
   }
 }
 
-func NewRoutingTable() (*RoutingTable, error) {
+func NewRoutingTable(freq int) (*RoutingTable, error) {
   rt := new(RoutingTable)
   cli, err := client.NewClientWithOpts(client.FromEnv)
   rt.dockerClient = cli
   rt.Routes = make(map[string]*service.Service)
   rt.Messages = make(chan string)
-  go rt.poll(5)
+  go rt.poll(time.Duration(freq))
   return rt, err
 }

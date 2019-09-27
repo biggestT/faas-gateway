@@ -1,6 +1,6 @@
 ## Deployment
 
-The PoC can be deployed to a single GCP compute instance with the Container Optimized OS base image. The deployed application currently serves some supporting functions for [trav.finsyn.se](http://trav.finsyn.se/systems/V86_2019-09-25_40_1.html). Beware that a deploy will result in some downtime.
+The PoC can be deployed to a single GCP compute instance with the Container Optimized OS base image. The deployed application currently serves some supporting functions for [trav.finsyn.se](http://trav.finsyn.se/systems/V64_2019-09-26_26_4.html). Beware that a deploy will result in some downtime.
 
 ```
 bigt@torlap1:~/travtech/api$ ./deploy/deploy.sh 

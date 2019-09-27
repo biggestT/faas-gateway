@@ -10,6 +10,7 @@ services:
     environment:
       - DOCKER_API_VERSION=1.40
       - CORS_ORIGIN=*
+      - POLL_FREQ=5
   rhymer:
     build:
       context: ./rhymer
