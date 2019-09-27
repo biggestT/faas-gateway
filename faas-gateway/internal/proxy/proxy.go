@@ -14,8 +14,8 @@ type proxyHandler struct {
 
 func (f *proxyHandler) enableCors(w *http.ResponseWriter) {
   header := (*w).Header()
-	header.Set("Access-Control-Allow-Origin", f.corsOrigin)
-	header.Set("Access-Control-Allow-Headers", "*")
+  header.Set("Access-Control-Allow-Origin", f.corsOrigin)
+  header.Set("Access-Control-Allow-Headers", "*")
   header.Set("Access-Control-Allow-Methods", "GET, POST, HEAD")
 }
 

@@ -63,7 +63,7 @@ func New(file string) *Dict {
   f, _ := os.Open(file)
   dict := new(Dict)
   dict.rhymes = make(rhymeMap)
-	dict.rhymeSoundExp, _ = regexp.Compile(`[aeiouyåäö][a-zåäö]{1,3}$`)
+  dict.rhymeSoundExp, _ = regexp.Compile(`[aeiouyåäö][a-zåäö]{1,3}$`)
   scanner := bufio.NewScanner(f)
   for scanner.Scan() {
     txt := scanner.Text()
